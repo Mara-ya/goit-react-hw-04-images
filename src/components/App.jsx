@@ -14,6 +14,7 @@ export default function App () {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showBtn, setShowBtn] = useState(false);
   const [largeImageURL, setLargeImageURL] = useState('');
   const [tags, setTags] = useState('');
 
@@ -24,6 +25,7 @@ export default function App () {
         const resultinImages = await fetchImages (searchQuery, page);
         const necessaryDataImg = resultinImages.map(({id, webformatURL, largeImageURL, tags}) => ({id, webformatURL, largeImageURL, tags}));
         setImages(prevImages => [...prevImages, ...necessaryDataImg]);
+        necessaryDataImg.length === 12 ? setShowBtn(true) : setShowBtn(false);
       } catch (error) {
         console.log(error)
       } finally {
@@ -36,12 +38,11 @@ export default function App () {
     }
   },[searchQuery, page])
 
-
   function handleClick () {
     setPage(prevState => prevState + 1)
   }
 
-  async function handleSubmit (data) {
+  function handleSubmit (data) {
     setPage(1);
     setImages([]);
    if (data){
@@ -72,7 +73,7 @@ export default function App () {
           <ImageGalleryItem images={images} openModal={openModal}/>
         </ImageGallery>
       }
-      {images.length > 0 && !loading && <BtnLoadMore onClick={handleClick}/>}
+      {showBtn && !loading && <BtnLoadMore onClick={handleClick}/>}
       {loading && <Loader/>}
     </Wrapper>
   );
