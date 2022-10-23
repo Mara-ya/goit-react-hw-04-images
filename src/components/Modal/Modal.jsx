@@ -16,7 +16,7 @@ export default function Modal ({ onClose, children }){
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    });
+    }, [onClose]);
 
 
     function handleBackdropClick (event) {
